@@ -8,24 +8,26 @@ const Contact = () => {
   const contactRef = useRef(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        setIsVisible(entry.isIntersecting);
-      },
-      { threshold: 0.1 }
-    );
+  const currentRef = contactRef.current;
 
-    if (contactRef.current) {
-      observer.observe(contactRef.current);
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const entry = entries[0];
+      setIsVisible(entry.isIntersecting);
+    },
+    { threshold: 0.1 }
+  );
+
+  if (currentRef) {
+    observer.observe(currentRef);
+  }
+
+  return () => {
+    if (currentRef) {
+      observer.unobserve(currentRef);
     }
-
-    return () => {
-      if (contactRef.current) {
-        observer.unobserve(contactRef.current);
-      }
-    };
-  }, []);
+  };
+}, []);
 
   return (
     <section id="Contact" ref={contactRef}>
